@@ -14,6 +14,10 @@
 #include <linux/netlink.h>
 #include <libnetfilter_log/linux_nfnetlink_log.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct nflog_handle;
 struct nflog_g_handle;
 struct nflog_data;
@@ -96,5 +100,9 @@ enum nflog_output_type {
 int nflog_nlmsg_snprintf(char *buf, size_t bufsiz, const struct nlmsghdr *nlh,
 			 struct nlattr **attr, enum nflog_output_type type,
 			 uint32_t flags);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif	/* __LIBNETFILTER_LOG_H */

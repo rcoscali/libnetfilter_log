@@ -7,6 +7,10 @@
 #include <fcntl.h>
 #include <sys/types.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* FIXME: glibc sucks */
 #ifndef MSG_TRUNC 
 #define MSG_TRUNC	0x20
@@ -67,5 +71,8 @@ enum
 };
 #define IPULOG_MAXERR IPULOG_ERR_INVNL
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* _LIBIPULOG_H */
