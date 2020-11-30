@@ -34,6 +34,6 @@ lib_LTLIBRARIES += libnetfilter_log_libipulog.la
 
 libnetfilter_log_libipulog_la_LDFLAGS = -Wc,-nostartfiles	\
 					-version-info 1:0:0
-libnetfilter_log_libipulog_la_LIBADD = libnetfilter_log.la
+libnetfilter_log_libipulog_la_LIBADD = libnetfilter_log.la ${LIBNFNETLINK_LIBS}
 libnetfilter_log_libipulog_la_SOURCES = libipulog_compat.c
 endif
