@@ -24,7 +24,7 @@ include ${top_srcdir}/Make_global.am
 
 lib_LTLIBRARIES = libnetfilter_log.la
 
-libnetfilter_log_la_LDFLAGS = -Wc,-nostartfiles -lnfnetlink	\
+libnetfilter_log_la_LDFLAGS = -Wc,-nostartfiles	\
 			      -version-info $(LIBVERSION)
 libnetfilter_log_la_SOURCES = libnetfilter_log.c nlmsg.c
 libnetfilter_log_la_LIBADD  = ${LIBNFNETLINK_LIBS} ${LIBMNL_LIBS}
