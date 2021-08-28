@@ -90,12 +90,11 @@ struct ipulog_handle *ipulog_create_handle(uint32_t gmask,
 	struct ipulog_handle *h;
 	unsigned int group = gmask2group(gmask);
 
-	h = malloc(sizeof(*h)+PAYLOAD_SIZE);
+	h = calloc(1, sizeof(*h)+PAYLOAD_SIZE);
 	if (! h) {
 		ipulog_errno = IPULOG_ERR_HANDLE;
 		return NULL;
 	}
-	memset(h, 0, sizeof(*h));
 	h->nfulh = nflog_open();
 	if (!h->nfulh)
 		goto out_free;

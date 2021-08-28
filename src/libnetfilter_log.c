@@ -238,11 +238,10 @@ struct nflog_handle *nflog_open_nfnl(struct nfnl_handle *nfnlh)
 	struct nflog_handle *h;
 	int err;
 
-	h = malloc(sizeof(*h));
+	h = calloc(1, sizeof(*h));
 	if (!h)
 		return NULL;
 
-	memset(h, 0, sizeof(*h));
 	h->nfnlh = nfnlh;
 
 	h->nfnlssh = nfnl_subsys_open(h->nfnlh, NFNL_SUBSYS_ULOG, 
@@ -398,11 +397,10 @@ nflog_bind_group(struct nflog_handle *h, uint16_t num)
 	if (find_gh(h, num))
 		return NULL;
 	
-	gh = malloc(sizeof(*gh));
+	gh = calloc(1, sizeof(*gh));
 	if (!gh)
 		return NULL;
 
-	memset(gh, 0, sizeof(*gh));
 	gh->h = h;
 	gh->id = num;
 
