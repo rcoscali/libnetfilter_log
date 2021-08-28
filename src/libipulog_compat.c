@@ -158,7 +158,7 @@ next_msg:	printf("next\n");
 	else
 		h->upmsg.mark = 0;
 
-	if (tb[NFULA_TIMESTAMP]) {
+	if (tb[NFULA_TIMESTAMP-1]) {
 		/* FIXME: 64bit network-to-host */
 		h->upmsg.timestamp_sec = h->upmsg.timestamp_usec = 0;
 	} else
