@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <net/if.h>
 #include <netinet/in.h>
 #include <libnfnetlink/libnfnetlink.h>
 #include <libnetfilter_log/libnetfilter_log.h>
@@ -159,20 +160,29 @@ next_msg:	printf("next\n");
 		h->upmsg.mark = 0;
 
 	if (tb[NFULA_TIMESTAMP-1]) {
-		/* FIXME: 64bit network-to-host */
-		h->upmsg.timestamp_sec = h->upmsg.timestamp_usec = 0;
+		struct nfulnl_msg_packet_timestamp *ts;
+		ts = NFA_DATA(tb[NFULA_TIMESTAMP-1]);
+
+		h->upmsg.timestamp_sec  = __be64_to_cpu(ts->sec);
+		h->upmsg.timestamp_usec = __be64_to_cpu(ts->usec);
 	} else
 		h->upmsg.timestamp_sec = h->upmsg.timestamp_usec = 0;
 
 	if (tb[NFULA_IFINDEX_INDEV-1]) {
-		/* FIXME: ifindex lookup */	
-		h->upmsg.indev_name[0] = '\0';
+		void *indev_ptr = NFA_DATA(tb[NFULA_IFINDEX_INDEV-1]);
+		uint32_t indev_idx = ntohl(*(uint32_t *)indev_ptr);
+
+		if (!if_indextoname(indev_idx, h->upmsg.indev_name))
+			h->upmsg.indev_name[0] = '\0';
 	} else
 		h->upmsg.indev_name[0] = '\0';
 
 	if (tb[NFULA_IFINDEX_OUTDEV-1]) {
-		/* FIXME: ifindex lookup */	
-		h->upmsg.outdev_name[0] = '\0';
+		void *outdev_ptr = NFA_DATA(tb[NFULA_IFINDEX_OUTDEV-1]);
+		uint32_t outdev_idx = ntohl(*(uint32_t *)outdev_ptr);
+
+		if (!if_indextoname(outdev_idx, h->upmsg.outdev_name))
+			h->upmsg.outdev_name[0] = '\0';
 	} else
 		h->upmsg.outdev_name[0] = '\0';
 
@@ -222,4 +232,3 @@ void ipulog_perror(const char *s)
 		fprintf(stderr, ": %s", strerror(errno));
 	fputc('\n', stderr);
 }
-
