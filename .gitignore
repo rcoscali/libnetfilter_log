@@ -13,5 +13,6 @@ Makefile.in
 /configure
 /libtool
 
+/doxygen/
 /doxygen.cfg
 /*.pc
