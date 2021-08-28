@@ -182,10 +182,10 @@ struct nfnl_handle *nflog_nfnlh(struct nflog_handle *h)
  *
  * Here's a little code snippet that binds to the group 100:
  * \verbatim
-	printf("binding this socket to group 0\n");
-	qh = nflog_bind_group(h, 0);
+	printf("binding this socket to group 100\n");
+	qh = nflog_bind_group(h, 100);
 	if (!qh) {
-		fprintf(stderr, "no handle for grup 0\n");
+		fprintf(stderr, "no handle for group 100\n");
 		exit(1);
 	}
 
