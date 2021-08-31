@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 /* FIXME: glibc sucks */
-#ifndef MSG_TRUNC 
+#ifndef MSG_TRUNC
 #define MSG_TRUNC	0x20
 #endif
 
@@ -55,7 +55,7 @@ const char *ipulog_strerror(int errcode);
 
 void ipulog_perror(const char *s);
 
-enum 
+enum
 {
 	IPULOG_ERR_NONE = 0,
 	IPULOG_ERR_IMPL,

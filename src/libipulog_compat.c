@@ -32,7 +32,7 @@ static const struct ipulog_errmap_t
 {
 	int errcode;
 	const char *message;
-} ipulog_errmap[] = 
+} ipulog_errmap[] =
 {
 	{ IPULOG_ERR_NONE, "No error" },
 	{ IPULOG_ERR_IMPL, "Not implemented yet" },
@@ -99,7 +99,7 @@ struct ipulog_handle *ipulog_create_handle(uint32_t gmask,
 	h->nfulh = nflog_open();
 	if (!h->nfulh)
 		goto out_free;
-	
+
 	/* bind_pf returns EEXIST if we are already registered */
 	rv = nflog_bind_pf(h->nfulh, AF_INET);
 	if (rv < 0 && rv != -EEXIST)
@@ -146,7 +146,7 @@ next_msg:	printf("next\n");
 
 	nfnl_parse_attr(tb, NFULA_MAX, NFM_NFA(NLMSG_DATA(nlh)),
 			NFM_PAYLOAD(nlh));
-	
+
 	if (!tb[NFULA_PACKET_HDR-1])
 		goto next_msg;
 
@@ -207,7 +207,7 @@ next_msg:	printf("next\n");
 		h->upmsg.data_len = NFA_PAYLOAD(tb[NFULA_PAYLOAD-1]);
 	} else
 		h->upmsg.data_len = 0;
-	
+
 	return &h->upmsg;
 }
 

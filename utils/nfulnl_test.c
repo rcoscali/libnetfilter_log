@@ -15,9 +15,9 @@ static int print_pkt(struct nflog_data *ldata)
 	char *prefix = nflog_get_prefix(ldata);
 	char *payload;
 	int payload_len = nflog_get_payload(ldata, &payload);
-	
+
 	if (ph) {
-		printf("hw_protocol=0x%04x hook=%u ", 
+		printf("hw_protocol=0x%04x hook=%u ",
 			ntohs(ph->hw_protocol), ph->hook);
 	}
 

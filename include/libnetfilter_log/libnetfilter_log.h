@@ -49,7 +49,7 @@ extern int nflog_set_flags(struct nflog_g_handle *gh, uint16_t flags);
 extern int nflog_set_qthresh(struct nflog_g_handle *gh, uint32_t qthresh);
 extern int nflog_set_nlbufsiz(struct nflog_g_handle *gh, uint32_t nlbufsiz);
 
-extern int nflog_callback_register(struct nflog_g_handle *gh, 
+extern int nflog_callback_register(struct nflog_g_handle *gh,
 				    nflog_callback *cb, void *data);
 extern int nflog_handle_packet(struct nflog_handle *h, char *buf, int len);
 

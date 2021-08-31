@@ -4,7 +4,7 @@
  * (C) 2005, 2008-2010 by Pablo Neira Ayuso <pablo@netfilter.org>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2 
+ *  it under the terms of the GNU General Public License version 2
  *  as published by the Free Software Foundation (or any later at your option)
  *
  *  This program is distributed in the hope that it will be useful,
@@ -82,7 +82,7 @@ struct nflog_g_handle
 int nflog_errno;
 
 /***********************************************************************
- * low level stuff 
+ * low level stuff
  ***********************************************************************/
 
 static void del_gh(struct nflog_g_handle *gh)
@@ -244,7 +244,7 @@ struct nflog_handle *nflog_open_nfnl(struct nfnl_handle *nfnlh)
 
 	h->nfnlh = nfnlh;
 
-	h->nfnlssh = nfnl_subsys_open(h->nfnlh, NFNL_SUBSYS_ULOG, 
+	h->nfnlssh = nfnl_subsys_open(h->nfnlh, NFNL_SUBSYS_ULOG,
 				      NFULNL_MSG_MAX, 0);
 	if (!h->nfnlssh) {
 		/* FIXME: nflog_errno */
@@ -393,10 +393,10 @@ struct nflog_g_handle *
 nflog_bind_group(struct nflog_handle *h, uint16_t num)
 {
 	struct nflog_g_handle *gh;
-	
+
 	if (find_gh(h, num))
 		return NULL;
-	
+
 	gh = calloc(1, sizeof(*gh));
 	if (!gh)
 		return NULL;
@@ -610,8 +610,8 @@ int nflog_set_flags(struct nflog_g_handle *gh, uint16_t flags)
  * The nfulnl_msg_packet_hdr structure is defined in libnetfilter_log.h as:
  *\verbatim
 	struct nfulnl_msg_packet_hdr {
-	        uint16_t       hw_protocol;    // hw protocol (network order)
-	        uint8_t        hook;           // netfilter hook
+		uint16_t       hw_protocol;    // hw protocol (network order)
+		uint8_t        hook;           // netfilter hook
 		uint8_t        _pad;
 	} __attribute__ ((packed));
 \endverbatim
@@ -760,11 +760,11 @@ uint32_t nflog_get_physoutdev(struct nflog_data *nfad)
  *
  * The nfulnl_msg_packet_hw structure is defined in libnetfilter_log.h as:
  * \verbatim
-        struct nfulnl_msg_packet_hw {
-                uint16_t       hw_addrlen;
-                uint16_t       _pad;
-                uint8_t        hw_addr[8];
-        } __attribute__ ((packed));
+	struct nfulnl_msg_packet_hw {
+		uint16_t       hw_addrlen;
+		uint16_t       _pad;
+		uint8_t        hw_addr[8];
+	} __attribute__ ((packed));
 \endverbatim
  */
 struct nfulnl_msg_packet_hw *nflog_get_packet_hw(struct nflog_data *nfad)
