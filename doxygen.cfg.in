@@ -2,7 +2,7 @@
 PROJECT_NAME           = @PACKAGE@
 PROJECT_NUMBER         = @VERSION@
 OUTPUT_DIRECTORY       = doxygen
-ABBREVIATE_BRIEF       = 
+ABBREVIATE_BRIEF       =
 FULL_PATH_NAMES        = NO
 TAB_SIZE               = 8
 OPTIMIZE_OUTPUT_FOR_C  = YES
@@ -13,7 +13,7 @@ EXCLUDE_SYMBOLS        = nflog_g_handle \
 			 nflog_handle \
 			 ipulog_errmap_t \
 			 ipulog_handle
-EXAMPLE_PATTERNS       = 
+EXAMPLE_PATTERNS       =
 SOURCE_BROWSER         = YES
 ALPHABETICAL_INDEX     = NO
 GENERATE_LATEX         = NO
