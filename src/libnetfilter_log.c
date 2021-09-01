@@ -214,7 +214,7 @@ struct nfnl_handle *nflog_nfnlh(struct nflog_handle *h)
 
 /**
  * nflog_fd - get the file descriptor associated with the nflog handler
- * \param log handler obtained via call to nflog_open()
+ * \param h handler obtained via call to nflog_open()
  *
  * \return a file descriptor for the netlink connection associated with the
  * given log connection handle. The file descriptor can then be used for
@@ -441,7 +441,7 @@ int nflog_unbind_group(struct nflog_g_handle *gh)
 
 /**
  * nflog_set_mode - set the amount of packet data that nflog copies to userspace
- * \param qh Netfilter log handle obtained by call to nflog_bind_group().
+ * \param gh Netfilter log handle obtained by call to nflog_bind_group().
  * \param mode the part of the packet that we are interested in
  * \param range size of the packet that we want to get
  *
@@ -806,10 +806,13 @@ char *nflog_get_prefix(struct nflog_data *nfad)
 }
 
 /**
- * nflog_get_uid - get the UID of the user that has generated the packet
+ * nflog_get_uid - get the UID of the user that generated the packet
  * \param nfad Netlink packet data handle passed to callback function
+ * \param uid UID of the user that generated the packet,
+ * if the function returns zero
  *
- * \return the UID of the user that has genered the packet, if any.
+ * \return 0 on success or -1 if UID was unavailable (\b uid
+ * is then invalid)
  */
 int nflog_get_uid(struct nflog_data *nfad, uint32_t *uid)
 {
@@ -823,8 +826,11 @@ int nflog_get_uid(struct nflog_data *nfad, uint32_t *uid)
 /**
  * nflog_get_gid - get the GID of the user that has generated the packet
  * \param nfad Netlink packet data handle passed to callback function
+ * \param gid GID of the user that generated the packet,
+ * if the function returns zero
  *
- * \return the GID of the user that has genered the packet, if any.
+ * \return 0 on success or -1 if GID was unavailable (\b gid
+ * is then invalid)
  */
 int nflog_get_gid(struct nflog_data *nfad, uint32_t *gid)
 {
@@ -838,10 +844,13 @@ int nflog_get_gid(struct nflog_data *nfad, uint32_t *gid)
 /**
  * nflog_get_seq - get the local nflog sequence number
  * \param nfad Netlink packet data handle passed to callback function
+ * \param seq local nflog sequence number,
+ * if the function returns zero
  *
  * You must enable this via nflog_set_flags().
  *
- * \return the local nflog sequence number.
+ * \return 0 on success or -1 if sequence number was unavailable (\b seq
+ * is then invalid)
  */
 int nflog_get_seq(struct nflog_data *nfad, uint32_t *seq)
 {
@@ -855,10 +864,13 @@ int nflog_get_seq(struct nflog_data *nfad, uint32_t *seq)
 /**
  * nflog_get_seq_global - get the global nflog sequence number
  * \param nfad Netlink packet data handle passed to callback function
+ * \param seq global nflog sequence number,
+ * if the function returns zero
  *
  * You must enable this via nflog_set_flags().
  *
- * \return the global nflog sequence number.
+ * \return 0 on success or -1 if sequence number was unavailable (\b seq
+ * is then invalid)
  */
 int nflog_get_seq_global(struct nflog_data *nfad, uint32_t *seq)
 {
@@ -885,7 +897,7 @@ do {								\
 } while (0)
 
 /**
- * \defgroup Printing
+ * \defgroup Printing Printing
  * @{
  */
 
