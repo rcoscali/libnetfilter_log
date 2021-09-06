@@ -183,14 +183,14 @@ struct nfnl_handle *nflog_nfnlh(struct nflog_handle *h)
  * Here's a little code snippet that binds to the group 100:
  * \verbatim
 	printf("binding this socket to group 100\n");
-	qh = nflog_bind_group(h, 100);
-	if (!qh) {
+	gh = nflog_bind_group(h, 100);
+	if (!gh) {
 		fprintf(stderr, "no handle for group 100\n");
 		exit(1);
 	}
 
 	printf("setting copy_packet mode\n");
-	if (nflog_set_mode(qh, NFULNL_COPY_PACKET, 0xffff) < 0) {
+	if (nflog_set_mode(gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
 		fprintf(stderr, "can't set packet copy mode\n");
 		exit(1);
 	}

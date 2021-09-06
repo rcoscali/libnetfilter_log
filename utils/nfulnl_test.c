@@ -51,8 +51,8 @@ static int cb(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 int main(int argc, char **argv)
 {
 	struct nflog_handle *h;
-	struct nflog_g_handle *qh;
-	struct nflog_g_handle *qh100;
+	struct nflog_g_handle *gh;
+	struct nflog_g_handle *gh100;
 	int rv, fd;
 	char buf[4096];
 
@@ -74,21 +74,21 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	printf("binding this socket to group 0\n");
-	qh = nflog_bind_group(h, 0);
-	if (!qh) {
-		fprintf(stderr, "no handle for grup 0\n");
+	gh = nflog_bind_group(h, 0);
+	if (!gh) {
+		fprintf(stderr, "no handle for group 0\n");
 		exit(1);
 	}
 
 	printf("binding this socket to group 100\n");
-	qh100 = nflog_bind_group(h, 100);
-	if (!qh100) {
+	gh100 = nflog_bind_group(h, 100);
+	if (!gh100) {
 		fprintf(stderr, "no handle for group 100\n");
 		exit(1);
 	}
 
 	printf("setting copy_packet mode\n");
-	if (nflog_set_mode(qh, NFULNL_COPY_PACKET, 0xffff) < 0) {
+	if (nflog_set_mode(gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
 		fprintf(stderr, "can't set packet copy mode\n");
 		exit(1);
 	}
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	fd = nflog_fd(h);
 
 	printf("registering callback for group 0\n");
-	nflog_callback_register(qh, &cb, NULL);
+	nflog_callback_register(gh, &cb, NULL);
 
 	printf("going into main loop\n");
 	while ((rv = recv(fd, buf, sizeof(buf), 0)) && rv >= 0) {
@@ -107,9 +107,9 @@ int main(int argc, char **argv)
 	}
 
 	printf("unbinding from group 100\n");
-	nflog_unbind_group(qh100);
+	nflog_unbind_group(gh100);
 	printf("unbinding from group 0\n");
-	nflog_unbind_group(qh);
+	nflog_unbind_group(gh);
 
 #ifdef INSANE
 	/* norally, applications SHOULD NOT issue this command,
