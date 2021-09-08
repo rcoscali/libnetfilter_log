@@ -58,38 +58,38 @@ int main(int argc, char **argv)
 
 	h = nflog_open();
 	if (!h) {
-		fprintf(stderr, "error during nflog_open()\n");
+		perror("nflog_open");
 		exit(1);
 	}
 
 	printf("unbinding existing nf_log handler for AF_INET (if any)\n");
 	if (nflog_unbind_pf(h, AF_INET) < 0) {
-		fprintf(stderr, "error nflog_unbind_pf()\n");
+		perror("nflog_unbind_pf");
 		exit(1);
 	}
 
 	printf("binding nfnetlink_log to AF_INET\n");
 	if (nflog_bind_pf(h, AF_INET) < 0) {
-		fprintf(stderr, "error during nflog_bind_pf()\n");
+		perror("nflog_bind_pf");
 		exit(1);
 	}
 	printf("binding this socket to group 0\n");
 	gh = nflog_bind_group(h, 0);
 	if (!gh) {
-		fprintf(stderr, "no handle for group 0\n");
+		perror("nflog_bind_group 0");
 		exit(1);
 	}
 
 	printf("binding this socket to group 100\n");
 	gh100 = nflog_bind_group(h, 100);
 	if (!gh100) {
-		fprintf(stderr, "no handle for group 100\n");
+		perror("nflog_bind_group 100");
 		exit(1);
 	}
 
 	printf("setting copy_packet mode\n");
 	if (nflog_set_mode(gh, NFULNL_COPY_PACKET, 0xffff) < 0) {
-		fprintf(stderr, "can't set packet copy mode\n");
+		perror("nflog_set_mode NFULNL_COPY_PACKET");
 		exit(1);
 	}
 
