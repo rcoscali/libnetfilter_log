@@ -144,13 +144,13 @@ int main(int argc, char *argv[])
 	char buf[MNL_SOCKET_BUFFER_SIZE];
 	struct nlmsghdr *nlh;
 	int ret;
-	unsigned int portid, qnum;
+	unsigned int portid, gnum;
 
 	if (argc != 2) {
 		printf("Usage: %s [queue_num]\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
-	qnum = atoi(argv[1]);
+	gnum = atoi(argv[1]);
 
 	nl = mnl_socket_open(NETLINK_NETFILTER);
 	if (nl == NULL) {
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	nlh = nflog_nlmsg_put_header(buf, NFULNL_MSG_CONFIG, AF_INET, qnum);
+	nlh = nflog_nlmsg_put_header(buf, NFULNL_MSG_CONFIG, AF_INET, gnum);
 	if (nflog_attr_put_cfg_cmd(nlh, NFULNL_CFG_CMD_BIND) < 0) {
 		perror("nflog_attr_put_cfg_cmd");
 		exit(EXIT_FAILURE);
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	nlh = nflog_nlmsg_put_header(buf, NFULNL_MSG_CONFIG, AF_UNSPEC, qnum);
+	nlh = nflog_nlmsg_put_header(buf, NFULNL_MSG_CONFIG, AF_UNSPEC, gnum);
 	if (nflog_attr_put_cfg_mode(nlh, NFULNL_COPY_PACKET, 0xffff) < 0) {
 		perror("nflog_attr_put_cfg_mode");
 		exit(EXIT_FAILURE);

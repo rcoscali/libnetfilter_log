@@ -18,18 +18,18 @@
  */
 
 /**
- * nflog_nlmsg_put_header - reserve and prepare room for nflog Netlink header
- * \param buf memory already allocated to store the Netlink header
- * \param type message type one of the enum nfulnl_msg_types
- * \param family protocol family to be an object of
- * \param qnum queue number to be an object of
+ * nflog_nlmsg_put_header - populate memory buffer with nflog Netlink headers
+ * \param buf pointer to memory buffer
+ * \param type either NFULNL_MSG_PACKET or NFULNL_MSG_CONFIG (enum nfulnl_msg_types)
+ * \param family protocol family
+ * \param gnum group number
  *
- * This function creates Netlink header in the memory buffer passed
- * as parameter that will send to nfnetlink log. This function
- * returns a pointer to the Netlink header structure.
+ * Initialises _buf_ to start with a netlink header for the log subsystem
+ * followed by an nfnetlink header with the log group
+ * \return pointer to created Netlink header structure
  */
 struct nlmsghdr *
-nflog_nlmsg_put_header(char *buf, uint8_t type, uint8_t family, uint16_t qnum)
+nflog_nlmsg_put_header(char *buf, uint8_t type, uint8_t family, uint16_t gnum)
 {
 	struct nlmsghdr *nlh = mnl_nlmsg_put_header(buf);
 	struct nfgenmsg *nfg;
@@ -40,19 +40,19 @@ nflog_nlmsg_put_header(char *buf, uint8_t type, uint8_t family, uint16_t qnum)
 	nfg = mnl_nlmsg_put_extra_header(nlh, sizeof(*nfg));
 	nfg->nfgen_family = family;
 	nfg->version = NFNETLINK_V0;
-	nfg->res_id = htons(qnum);
+	nfg->res_id = htons(gnum);
 
 	return nlh;
 }
 
 /**
  * nflog_attr_put_cfg_mode - add a mode attribute to nflog netlink message
- * \param nlh pointer to the netlink message
- * \param mode copy mode defined in linux/netfilter/nfnetlink_log.h
+ * \param nlh pointer to netlink message
+ * \param mode copy mode: NFULNL_COPY_NONE, NFULNL_COPY_META or
+ * NFULNL_COPY_PACKET
  * \param range copy range
  *
- * this function returns -1 and errno is explicitly set on error.
- * On success, this function returns 1.
+ * \return 0
  */
 int nflog_attr_put_cfg_mode(struct nlmsghdr *nlh, uint8_t mode, uint32_t range)
 {
@@ -68,12 +68,11 @@ int nflog_attr_put_cfg_mode(struct nlmsghdr *nlh, uint8_t mode, uint32_t range)
 }
 
 /**
- * nflog_attr_put_cfg_cmd - add a cmd attribute to nflog netlink message
- * \param nlh pointer to the netlink message
- * \param cmd command one of the enum nfulnl_msg_config_cmds
+ * nflog_attr_put_cfg_cmd - add a command attribute to nflog netlink message
+ * \param nlh pointer to netlink message
+ * \param cmd one of the enum nfulnl_msg_config_cmds
  *
- * this function returns -1 and errno is explicitly set on error.
- *  On success, this function returns 1.
+ * \return 0
  */
 int nflog_attr_put_cfg_cmd(struct nlmsghdr *nlh, uint8_t cmd)
 {
@@ -148,11 +147,10 @@ static int nflog_parse_attr_cb(const struct nlattr *attr, void *data)
 
 /**
  * nflog_nlmsg_parse - set nlattrs from netlink message
- * \param nlh netlink message that you want to read.
- * \param attr pointer to the array of nlattr which size is NFULA_MAX + 1
+ * \param nlh pointer to netlink message
+ * \param attr pointer to an array of nlattr of size NFULA_MAX + 1
  *
- * This function returns MNL_CB_ERROR if any error occurs, or MNL_CB_OK on
- * success.
+ * \return 0
  */
 int nflog_nlmsg_parse(const struct nlmsghdr *nlh, struct nlattr **attr)
 {
@@ -164,12 +162,12 @@ int nflog_nlmsg_parse(const struct nlmsghdr *nlh, struct nlattr **attr)
  * nflog_nlmsg_snprintf - print a nflog nlattrs to a buffer
  * \param buf buffer used to build the printable nflog
  * \param bufsiz size of the buffer
- * \param nlh netlink message (to get queue num in the futuer)
- * \param attr pointer to a nflog attrs
+ * \param nlh pointer to netlink message (to get queue num in the future)
+ * \param attr pointer to an array of nlattr of size NFULA_MAX + 1
  * \param type print message type in enum nflog_output_type
  * \param flags The flag that tell what to print into the buffer
  *
- * This function supports the following type - flags:
+ * This function supports the following types / flags:
  *
  *   type: NFLOG_OUTPUT_XML
  *	- NFLOG_XML_PREFIX: include the string prefix
@@ -181,12 +179,12 @@ int nflog_nlmsg_parse(const struct nlmsghdr *nlh, struct nlattr **attr)
  *	- NFLOG_XML_TIME: include the timestamp
  *	- NFLOG_XML_ALL: include all the logging information (all flags set)
  *
- * You can combine this flags with an binary OR.
+ * You can combine these flags with a bitwise OR.
  *
- * this function returns -1 and errno is explicitly set in case of
- * failure, otherwise the length of the string that would have been
- * printed into the buffer (in case that there is enough room in
- * it). See snprintf() return value for more information.
+ * \return -1 on failure else same as snprintf
+ * \par Errors
+ * __EOPNOTSUPP__ _type_ is unsupported (i.e. not __NFLOG_OUTPUT_XML__)
+ * \sa __snprintf__(3)
  */
 int nflog_nlmsg_snprintf(char *buf, size_t bufsiz, const struct nlmsghdr *nlh,
 			 struct nlattr **attr, enum nflog_output_type type,
