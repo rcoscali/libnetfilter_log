@@ -6,15 +6,15 @@
 
 #include <libnetfilter_log/libnetfilter_log.h>
 
-static int print_pkt(struct nflog_data *ldata)
+static int print_pkt(struct nflog_data *nfad)
 {
-	struct nfulnl_msg_packet_hdr *ph = nflog_get_msg_packet_hdr(ldata);
-	uint32_t mark = nflog_get_nfmark(ldata);
-	uint32_t indev = nflog_get_indev(ldata);
-	uint32_t outdev = nflog_get_outdev(ldata);
-	char *prefix = nflog_get_prefix(ldata);
+	struct nfulnl_msg_packet_hdr *ph = nflog_get_msg_packet_hdr(nfad);
+	uint32_t mark = nflog_get_nfmark(nfad);
+	uint32_t indev = nflog_get_indev(nfad);
+	uint32_t outdev = nflog_get_outdev(nfad);
+	char *prefix = nflog_get_prefix(nfad);
 	char *payload;
-	int payload_len = nflog_get_payload(ldata, &payload);
+	int payload_len = nflog_get_payload(nfad, &payload);
 
 	if (ph) {
 		printf("hw_protocol=0x%04x hook=%u ",
