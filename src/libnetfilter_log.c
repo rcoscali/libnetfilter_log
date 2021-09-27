@@ -221,6 +221,11 @@ functions.
 \fBParsing\fP man page (\fBman nflog_get_gid\fP)
 .RE
 .PP
+.SH SYNOPSIS
+.nf
+\fB
+#include <stddef.h>
+#include <libnetfilter_log/libnetfilter_log.h>
 \endmanonly
  * @{
  */
@@ -338,6 +343,13 @@ int nflog_handle_packet(struct nflog_handle *h, char *buf, int len)
  * When the program has finished with libnetfilter_log, it has to call
  * the nflog_close() function to release all associated resources.
  *
+ * \manonly
+.SH SYNOPSIS
+.nf
+\fB
+#include <netinet/in.h>
+#include <libnetfilter_log/libnetfilter_log.h>
+\endmanonly
  * @{
  */
 
@@ -634,6 +646,13 @@ int nflog_set_flags(struct nflog_g_handle *gh, uint16_t flags)
 
 /**
  * \defgroup Parsing Message parsing functions
+ * \manonly
+.SH SYNOPSIS
+.nf
+\fB
+#include <stddef.h>
+#include <libnetfilter_log/libnetfilter_log.h>
+\endmanonly
  * @{
  */
 
@@ -748,6 +767,7 @@ uint32_t nflog_get_indev(struct nflog_data *nfad)
 
 /**
  * nflog_get_physindev - get the physical interface that the packet was received
+ * through
  * \param nfad Netlink packet data handle passed to callback function
  *
  * \return The index of the physical device the packet was received via.
@@ -760,10 +780,10 @@ uint32_t nflog_get_physindev(struct nflog_data *nfad)
 }
 
 /**
- * nflog_get_outdev - gets the interface that the packet will be routed out
+ * nflog_get_outdev - gets the interface that the packet will be routed to
  * \param nfad Netlink packet data handle passed to callback function
  *
- * \return The index of the device the packet will be sent out.  If the
+ * \return The index of the device the packet will be sent to.  If the
  * returned index is 0, the packet is destined for localhost or the output
  * interface is not yet known (ie. PREROUTING?).
  */
@@ -773,15 +793,12 @@ uint32_t nflog_get_outdev(struct nflog_data *nfad)
 }
 
 /**
- * nflog_get_physoutdev - get the physical interface that the packet output
+ * nflog_get_physoutdev - get the physical interface for packet output
  * \param nfad Netlink packet data handle passed to callback function
  *
- * The index of the physical device the packet will be sent out. If the
+ * \return Index of physical device the packet will be routed to. If the
  * returned index is 0, the packet is destined for localhost or the
  * physical output interface is not yet known (ie. PREROUTING?).
- *
- * \return The index of physical interface that the packet output will be
- * routed out.
  */
 uint32_t nflog_get_physoutdev(struct nflog_data *nfad)
 {
@@ -938,6 +955,12 @@ do {								\
 
 /**
  * \defgroup Printing Printing
+ * \manonly
+.SH SYNOPSIS
+.nf
+\fB
+#include <libnetfilter_log/libnetfilter_log.h>
+\endmanonly
  * @{
  */
 

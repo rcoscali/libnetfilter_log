@@ -14,6 +14,13 @@
 
 /**
  * \defgroup nlmsg Netlink message helper functions
+ * \manonly
+.SH SYNOPSIS
+.nf
+\fB
+#include <netinet/in.h>
+#include <libnetfilter_log/libnetfilter_log.h>
+\endmanonly
  * @{
  */
 
