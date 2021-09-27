@@ -818,11 +818,15 @@ uint32_t nflog_get_physoutdev(struct nflog_data *nfad)
  * The nfulnl_msg_packet_hw structure is defined in libnetfilter_log.h as:
  * \verbatim
 	struct nfulnl_msg_packet_hw {
-		uint16_t       hw_addrlen;
+		uint16_t       hw_addrlen; // Network Byte Order
 		uint16_t       _pad;
 		uint8_t        hw_addr[8];
 	} __attribute__ ((packed));
 \endverbatim
+ *
+ * \return Pointer to struct nfulnl_msg_packet_hw from originating host
+ * or NULL if none available (e.g. locally-originated packet not for \b lo
+ * interface).
  */
 struct nfulnl_msg_packet_hw *nflog_get_packet_hw(struct nflog_data *nfad)
 {
