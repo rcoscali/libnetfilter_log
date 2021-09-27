@@ -323,6 +323,20 @@ struct nflog_handle *nflog_open(void)
  * @}
  */
 
+/**
+ * \addtogroup Log
+ * @{
+ */
+
+/**
+ * nflog_callback_register - register function to process packets
+ *
+ * \param gh Netfilter log group handle obtained by call to nflog_bind_group()
+ * \param cb callback function to call for each logged packet
+ * \param data custom data to pass to the callback function
+ \return 0
+ */
+
 int nflog_callback_register(struct nflog_g_handle *gh, nflog_callback *cb,
 			     void *data)
 {
@@ -332,10 +346,28 @@ int nflog_callback_register(struct nflog_g_handle *gh, nflog_callback *cb,
 	return 0;
 }
 
+/**
+ * nflog_handle_packet - handle a packet received from the nflog subsystem
+ * \param h Netfilter log handle obtained via call to nflog_open()
+ * \param buf nflog data received from the kernel
+ * \param len length of packet data in buffer
+ *
+ * Triggers an associated callback for each packet contained in \b buf.
+ * Data can be read from the queue using nflog_fd() and \b recv().
+ * See example code in the Detailed Description.
+ * \return 0 on success, -1 if either the callback returned -ve or \b buf
+ * contains corrupt data. \b errno is not reliably set:
+ * caller should zeroise first if interested.
+ */
+
 int nflog_handle_packet(struct nflog_handle *h, char *buf, int len)
 {
 	return nfnl_handle_packet(h->nfnlh, buf, len);
 }
+
+/**
+ * @}
+ */
 
 /**
  * \addtogroup LibrarySetup
