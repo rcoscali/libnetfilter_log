@@ -8,16 +8,30 @@
 
 static int print_pkt(struct nflog_data *nfad)
 {
+	uint32_t outdev, indev, hw_addrlen;
 	struct nfulnl_msg_packet_hdr *ph;
-	uint32_t outdev, indev;
+	struct nfulnl_msg_packet_hw *hw;
 	int payload_len;
 	char *payload;
 	char *prefix;
+	int i;
 
 	ph = nflog_get_msg_packet_hdr(nfad);
 	if (ph) {
 		printf("hw_protocol=0x%04x hook=%u ",
 			ntohs(ph->hw_protocol), ph->hook);
+	}
+
+	hw = nflog_get_packet_hw(nfad);
+	if (hw) {
+		hw_addrlen = ntohs(hw->hw_addrlen);
+		printf("hw_addrlen=%d ", hw_addrlen);
+
+		printf("hw_addr=");
+		for (i = 0; i < hw_addrlen - 1; i++)
+			printf("%02x:", hw->hw_addr[i]);
+
+		printf("%02x ", hw->hw_addr[hw_addrlen - 1]);
 	}
 
 	printf("mark=%u ", nflog_get_nfmark(nfad));
