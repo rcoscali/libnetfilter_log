@@ -8,31 +8,34 @@
 
 static int print_pkt(struct nflog_data *nfad)
 {
-	struct nfulnl_msg_packet_hdr *ph = nflog_get_msg_packet_hdr(nfad);
-	uint32_t mark = nflog_get_nfmark(nfad);
-	uint32_t indev = nflog_get_indev(nfad);
-	uint32_t outdev = nflog_get_outdev(nfad);
-	char *prefix = nflog_get_prefix(nfad);
+	struct nfulnl_msg_packet_hdr *ph;
+	uint32_t outdev, indev;
+	int payload_len;
 	char *payload;
-	int payload_len = nflog_get_payload(nfad, &payload);
+	char *prefix;
 
+	ph = nflog_get_msg_packet_hdr(nfad);
 	if (ph) {
 		printf("hw_protocol=0x%04x hook=%u ",
 			ntohs(ph->hw_protocol), ph->hook);
 	}
 
-	printf("mark=%u ", mark);
+	printf("mark=%u ", nflog_get_nfmark(nfad));
 
+	indev = nflog_get_indev(nfad);
 	if (indev > 0)
 		printf("indev=%u ", indev);
 
+	outdev = nflog_get_outdev(nfad);
 	if (outdev > 0)
 		printf("outdev=%u ", outdev);
 
 
-	if (prefix) {
+	prefix = nflog_get_prefix(nfad);
+	if (prefix)
 		printf("prefix=\"%s\" ", prefix);
-	}
+
+	payload_len = nflog_get_payload(nfad, &payload);
 	if (payload_len >= 0)
 		printf("payload_len=%d ", payload_len);
 
