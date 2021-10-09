@@ -7,10 +7,10 @@ nfulnl_test_LDADD = ../src/libnetfilter_log.la
 nfulnl_test_LDFLAGS = -dynamic
 
 nf_log_SOURCES = nf-log.c
-nf_log_LDADD = ../src/libnetfilter_log.la -lmnl
+nf_log_LDADD   = ../src/libnetfilter_log.la $(LIBMNL_LIBS)
 nf_log_LDFLAGS = -dynamic
 if BUILD_NFCT
-nf_log_LDFLAGS += $(LIBNETFILTER_CONNTRACK_LIBS)
+nf_log_LDADD += $(LIBNETFILTER_CONNTRACK_LIBS)
 nf_log_CPPFLAGS = ${AM_CPPFLAGS} ${LIBNETFILTER_CONNTRACK_CFLAGS} -DBUILD_NFCT
 endif
 
