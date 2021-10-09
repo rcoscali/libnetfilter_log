@@ -19,6 +19,6 @@ if BUILD_IPULOG
 check_PROGRAMS += ulog_test
 
 ulog_test_SOURCES = ulog_test.c
-ulog_test_LDADD = ../src/libnetfilter_log_libipulog.la ../src/libnetfilter_log.la
+ulog_test_LDADD   = ../src/libnetfilter_log_libipulog.la
 ulog_test_LDFLAGS = -dynamic
 endif
