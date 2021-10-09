@@ -39,7 +39,12 @@ PKG_CHECK_MODULES([LIBNETFILTER_CONNTRACK], [libnetfilter_conntrack >= 1.0.2],
 AM_CONDITIONAL([BUILD_NFCT], [test "$HAVE_LNFCT" -eq 1])
 
 dnl Output the makefile
-AC_CONFIG_FILES([Makefile src/Makefile include/Makefile
-	include/libnetfilter_log/Makefile utils/Makefile libnetfilter_log.pc
-	doxygen.cfg])
+AC_CONFIG_FILES([Makefile
+		src/Makefile
+		include/Makefile
+		include/libnetfilter_log/Makefile
+		utils/Makefile
+		libnetfilter_log.pc
+		libnetfilter_log_libipulog.pc
+		doxygen.cfg])
 AC_OUTPUT
