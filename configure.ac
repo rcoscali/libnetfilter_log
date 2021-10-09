@@ -24,7 +24,7 @@ case "$host" in
 esac
 
 AC_ARG_WITH([ipulog],
-  AC_HELP_STRING([--without-ipulog], [don't build libipulog compat library]))
+  AS_HELP_STRING([--without-ipulog], [don't build libipulog compat library]))
 AM_CONDITIONAL([BUILD_IPULOG], [test "x$with_ipulog" != xno])
 
 dnl Dependencies
