@@ -82,6 +82,7 @@ enum {
 	NFLOG_XML_PHYSDEV	= (1 << 4),
 	NFLOG_XML_PAYLOAD	= (1 << 5),
 	NFLOG_XML_TIME		= (1 << 6),
+	NFLOG_XML_CTID		= (1 << 7),
 	NFLOG_XML_ALL		= ~0U,
 };
 

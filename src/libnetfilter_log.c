@@ -33,6 +33,9 @@
 #include <libnfnetlink/libnfnetlink.h>
 #include <libnetfilter_log/libnetfilter_log.h>
 
+#include <libmnl/libmnl.h>
+#include <linux/netfilter/nfnetlink_conntrack.h>
+
 /**
  * \mainpage
  *
@@ -652,6 +655,7 @@ int nflog_set_nlbufsiz(struct nflog_g_handle *gh, uint32_t nlbufsiz)
  *
  *	- NFULNL_CFG_F_SEQ: This enables local nflog sequence numbering.
  *	- NFULNL_CFG_F_SEQ_GLOBAL: This enables global nflog sequence numbering.
+ *	- NFULNL_CFG_F_CONNTRACK: This enables to acquire related conntrack.
  *
  * \return 0 on success, -1 on failure with \b errno set.
  * \par Errors
@@ -975,6 +979,38 @@ int nflog_get_seq_global(struct nflog_data *nfad, uint32_t *seq)
 }
 
 /**
+ * nflog_get_ct_id - get the conntrack id
+ * \param nfad Netlink packet data handle passed to callback function
+ * \param id conntrack id, if the function returns zero
+ *
+ * You must enable this via nflog_set_flags().
+ *
+ * \return 0 on success or -1 if conntrack itself or its id was unavailable
+ */
+int nflog_get_ctid(struct nflog_data *nfad, uint32_t *id)
+{
+	struct nlattr *cta = (struct nlattr *)nfad->nfa[NFULA_CT - 1];
+	struct nlattr *attr, *ida = NULL;
+
+	if (!cta)
+		return -1;
+
+	mnl_attr_for_each_nested(attr, cta) {
+		if (mnl_attr_get_type(attr) == CTA_ID) {
+			ida = attr;
+			break;
+		}
+	}
+
+	if (!ida || mnl_attr_validate(ida, MNL_TYPE_U32) < 0)
+		return -1;
+
+	*id = ntohl(mnl_attr_get_u32(ida));
+
+	return 0;
+}
+
+/**
  * @}
  */
 
@@ -1016,6 +1052,7 @@ do {								\
  *	- NFLOG_XML_PHYSDEV: include the physical device information
  *	- NFLOG_XML_PAYLOAD: include the payload (in hexadecimal)
  *	- NFLOG_XML_TIME: include the timestamp
+ *	- NFLOG_XML_CTID: include conntrack id
  *	- NFLOG_XML_ALL: include all the logging information (all flags set)
  *
  * You can combine these flags with a bitwise OR.
@@ -1028,10 +1065,10 @@ do {								\
  */
 int nflog_snprintf_xml(char *buf, size_t rem, struct nflog_data *tb, int flags)
 {
-	struct nfulnl_msg_packet_hdr *ph;
-	struct nfulnl_msg_packet_hw *hwph;
-	uint32_t mark, ifi;
 	int size, offset = 0, len = 0, ret;
+	struct nfulnl_msg_packet_hw *hwph;
+	struct nfulnl_msg_packet_hdr *ph;
+	uint32_t mark, ifi, ctid;
 	char *data;
 
 	size = snprintf(buf + offset, rem, "<log>");
@@ -1148,6 +1185,15 @@ int nflog_snprintf_xml(char *buf, size_t rem, struct nflog_data *tb, int flags)
 		size = snprintf(buf + offset, rem,
 				"<physoutdev>%u</physoutdev>", ifi);
 		SNPRINTF_FAILURE(size, rem, offset, len);
+	}
+
+	if (flags & NFLOG_XML_CTID) {
+		ret = nflog_get_ctid(tb, &ctid);
+		if (ret >= 0) {
+			size = snprintf(buf + offset, rem,
+					"<ctid>%u</ctid>", ctid);
+			SNPRINTF_FAILURE(size, rem, offset, len);
+		}
 	}
 
 	ret = nflog_get_payload(tb, &data);
