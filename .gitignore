@@ -16,6 +16,8 @@ Makefile.in
 /configure
 /libtool
 
-/doxygen/
-/doxygen.cfg
+/doxygen/doxygen.cfg
+/doxygen/doxyfile.stamp
+/doxygen/man/
+/doxygen/html/
 /*.pc
