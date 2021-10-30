@@ -9,7 +9,7 @@ Name: libnetfilter_log
 Description: Netfilter userspace packet logging library
 URL: http://netfilter.org/projects/libnetfilter_log/
 Version: @VERSION@
-Requires.private: libnfnetlink >= @LIBNFNETLINK_MIN_VERSION@,
+Requires.private: libnfnetlink >= @LIBNFNETLINK_MIN_VERSION@, \
 		  libmnl >= @LIBMNL_MIN_VERSION@
 Conflicts:
 Libs: -L${libdir} -lnetfilter_log
