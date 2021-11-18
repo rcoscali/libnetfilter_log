@@ -31,7 +31,7 @@ AS_IF([test "$enable_man_pages" = yes],
 
 AC_PROG_CC
 AM_PROG_CC_C_O
-LT_INIT([disable_static])
+LT_INIT([disable-static])
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
