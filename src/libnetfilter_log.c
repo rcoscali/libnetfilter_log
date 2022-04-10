@@ -557,7 +557,7 @@ int nflog_set_mode(struct nflog_g_handle *gh,
  * \param gh Netfilter log group handle obtained by call to nflog_bind_group().
  * \param timeout Time to wait until the log buffer is pushed to userspace
  *
- * This function allows to set the maximum time that nflog waits until it
+ * This function allows one to set the maximum time that nflog waits until it
  * pushes the log buffer to userspace if no new logged packets have occured.
  * Basically, nflog implements a buffer to reduce the computational cost
  * of delivering the log message to userspace.
