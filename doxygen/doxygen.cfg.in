@@ -21,5 +21,4 @@ GENERATE_MAN           = @GEN_MAN@
 GENERATE_HTML          = @GEN_HTML@
 MAN_LINKS              = YES
 HAVE_DOT               = @HAVE_DOT@
-DOT_TRANSPARENT        = YES
 SEARCHENGINE           = NO
