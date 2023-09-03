@@ -133,10 +133,9 @@ ulog_packet_msg_t *ipulog_get_packet(struct ipulog_handle *h,
 	struct nfulnl_msg_packet_hdr *hdr;
 
 	if (!h->last_nlh) {
-		printf("first\n");
 		nlh = nfnl_get_msg_first(nflog_nfnlh(h->nfulh), buf, len);
 	}else {
-next_msg:	printf("next\n");
+next_msg:
 		nlh = nfnl_get_msg_next(nflog_nfnlh(h->nfulh), buf, len);
 	}
 	h->last_nlh = nlh;
