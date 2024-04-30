@@ -161,11 +161,6 @@ static int __nflog_rcv_pkt(struct nlmsghdr *nlh, struct nfattr *nfa[],
 	return gh->cb(gh, nfmsg, &nfldata, gh->data);
 }
 
-static struct nfnl_callback pkt_cb = {
-	.call 		= &__nflog_rcv_pkt,
-	.attr_count 	= NFULA_MAX,
-};
-
 /* public interface */
 
 struct nfnl_handle *nflog_nfnlh(struct nflog_handle *h)
@@ -255,6 +250,10 @@ struct nflog_handle *nflog_open_nfnl(struct nfnl_handle *nfnlh)
 {
 	struct nflog_handle *h;
 	int err;
+	struct nfnl_callback pkt_cb = {
+		.call 		= &__nflog_rcv_pkt,
+		.attr_count 	= NFULA_MAX,
+	};
 
 	h = calloc(1, sizeof(*h));
 	if (!h)
